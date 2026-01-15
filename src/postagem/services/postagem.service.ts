@@ -3,17 +3,23 @@ import { InjectRepository } from '@nestjs/typeorm'; // Injeta o repositório do 
 import { DeleteResult, ILike, Repository } from 'typeorm'; // ILike para busca case-insensitive, Repository para operações no banco
 //import { DeleteResult } from 'typeorm/browser'; // Tipo para resultado de deleção
 import { Postagem } from '../entities/postagem.entity'; // Importa a entidade Postagem
+import { TemaService } from '../../tema/services/tema.service';
 
 @Injectable() // Torna a classe injetável pelo NestJS
 export class PostagemService {
   constructor(
     @InjectRepository(Postagem) // Injeta o repositório da entidade Postagem
     private postagemRepository: Repository<Postagem>, // Repositório para acessar o banco
+    private temaService: TemaService,
   ) {}
 
   async findAll(): Promise<Postagem[]> {
     // Busca todas as postagens
-    return await this.postagemRepository.find(); // Retorna todas do banco
+    return await this.postagemRepository.find({
+      relations: {
+        tema: true,
+      },
+    }); // Retorna todas do banco
   }
 
   async findById(id: number): Promise<Postagem> {
@@ -29,6 +35,9 @@ export class PostagemService {
     const postagem = await this.postagemRepository.findOne({
       where: {
         id,
+      },
+      relations: {
+        tema: true,
       },
     });
 
@@ -58,10 +67,14 @@ export class PostagemService {
       where: {
         titulo: ILike(`%${titulo}%`), // Busca por título parecido
       },
+      relations: {
+        tema: true,
+      },
     });
   }
 
   async create(postagem: Postagem): Promise<Postagem> {
+    await this.temaService.findById(postagem.tema.id);
     // Cria uma nova postagem
     return await this.postagemRepository.save(postagem); // Salva no banco
   }
@@ -69,6 +82,8 @@ export class PostagemService {
   async update(postagem: Postagem): Promise<Postagem> {
     // Atualiza uma postagem existente
     await this.findById(postagem.id); // Garante que existe antes de atualizar
+
+    await this.temaService.findById(postagem.tema.id);
 
     return await this.postagemRepository.save(postagem); // Salva as alterações
   }

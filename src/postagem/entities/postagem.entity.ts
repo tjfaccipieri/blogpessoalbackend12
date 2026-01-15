@@ -1,10 +1,12 @@
 import { IsNotEmpty } from 'class-validator'; // Valida se o campo não está vazio
 import {
   Column, // Define uma coluna no banco de dados
-  Entity, // Marca a classe como uma entidade do TypeORM
+  Entity,
+  ManyToOne, // Marca a classe como uma entidade do TypeORM
   PrimaryGeneratedColumn, // Define a coluna como chave primária gerada automaticamente
   UpdateDateColumn, // Atualiza automaticamente a data quando o registro é alterado
 } from 'typeorm';
+import { Tema } from '../../tema/entities/tema.entity';
 
 @Entity({ name: 'tb_postagens' }) // Define o nome da tabela no banco de dados
 export class Postagem {
@@ -21,4 +23,9 @@ export class Postagem {
 
   @UpdateDateColumn() // Coluna que armazena a data de atualização automática
   data: Date;
+
+  @ManyToOne(() => Tema, (tema) => tema.postagem, {
+    onDelete: 'CASCADE',
+  })
+  tema: Tema;
 }
