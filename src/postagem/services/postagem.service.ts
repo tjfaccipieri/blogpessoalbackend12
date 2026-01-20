@@ -2,8 +2,8 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common'; // Impor
 import { InjectRepository } from '@nestjs/typeorm'; // Injeta o repositório do TypeORM
 import { DeleteResult, ILike, Repository } from 'typeorm'; // ILike para busca case-insensitive, Repository para operações no banco
 //import { DeleteResult } from 'typeorm/browser'; // Tipo para resultado de deleção
-import { Postagem } from '../entities/postagem.entity'; // Importa a entidade Postagem
 import { TemaService } from '../../tema/services/tema.service';
+import { Postagem } from '../entities/postagem.entity'; // Importa a entidade Postagem
 
 @Injectable() // Torna a classe injetável pelo NestJS
 export class PostagemService {
@@ -18,6 +18,7 @@ export class PostagemService {
     return await this.postagemRepository.find({
       relations: {
         tema: true,
+        usuario: true,
       },
     }); // Retorna todas do banco
   }
@@ -38,6 +39,7 @@ export class PostagemService {
       },
       relations: {
         tema: true,
+        usuario: true,
       },
     });
 
@@ -69,6 +71,7 @@ export class PostagemService {
       },
       relations: {
         tema: true,
+        usuario: true,
       },
     });
   }
