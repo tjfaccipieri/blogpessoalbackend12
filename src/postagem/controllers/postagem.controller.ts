@@ -14,8 +14,11 @@ import {
 import { Postagem } from '../entities/postagem.entity'; // Importa a entidade Postagem
 import { PostagemService } from '../services/postagem.service'; // Importa o serviço PostagemService
 import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Postagem')
 @UseGuards(JwtAuthGuard)
+@ApiBearerAuth()
 @Controller('/postagens') // Define o prefixo das rotas desse controller como /postagens
 export class PostagemController {
   constructor(private readonly postagemService: PostagemService) {} // Injeta o serviço PostagemService
