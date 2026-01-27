@@ -9,7 +9,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Blog Pessoal do Thiago')
     .setDescription(
-      'Projeto Blog Pessoal feito na turma JS12 com muito amor e carinho',
+      'Projeto Blog Pessoal feito na turma JS12 com muito amor e carinho, e agora, online',
     )
     .setContact(
       'Generation Brasil',
